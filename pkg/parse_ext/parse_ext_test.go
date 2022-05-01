@@ -24,7 +24,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kdpross/go-parse/internal/parse"
+	"github.com/kdpross/go-parse/pkg/parse"
 )
 
 func TestRep1(t *testing.T) {

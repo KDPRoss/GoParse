@@ -17,8 +17,8 @@
 package parseext
 
 import (
-	"github.com/kdpross/go-parse/internal/data"
-	"github.com/kdpross/go-parse/internal/parse"
+	"github.com/kdpross/go-parse/pkg/data"
+	"github.com/kdpross/go-parse/pkg/parse"
 )
 
 func cons[A any](p data.Pair[A, []A]) []A {

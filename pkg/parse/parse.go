@@ -21,7 +21,7 @@ package parse
 import (
 	"github.com/gijsbers/go-pcre"
 
-	"github.com/kdpross/go-parse/internal/data"
+	"github.com/kdpross/go-parse/pkg/data"
 )
 
 type source struct {

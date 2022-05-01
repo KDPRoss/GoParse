@@ -25,7 +25,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/kdpross/go-parse/internal/data"
+	"github.com/kdpross/go-parse/pkg/data"
 )
 
 func TestResultSuccessCoherent(t *testing.T) {
