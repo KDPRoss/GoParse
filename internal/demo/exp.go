@@ -28,7 +28,17 @@ import (
 	"github.com/kdpross/go-parse/pkg/parse_ext"
 )
 
-func main() {
+// A version of the old 'untyped arithmetic expressions'
+// interpreter. In any ordinary PL context, we'd parse this
+// to an AST and then interpret *that*, but I've woven the
+// interpreter into the parser for brevity.
+//
+//      n ::= <number>
+//      f ::= "(" a ")" | n
+//      m ::= f "*" m | f
+//      a ::= m "+" a | m
+
+var parser = func() parse.Parser[int] {
 	numP := parse.Proc(
 		parseext.StringOf(parseext.DigitC),
 		func(s string) int {
@@ -79,10 +89,24 @@ func main() {
 
 	factor = parse.Alt(parseext.Brackets(parse.Cache(addP)), numP)
 
-	fmt.Println("Welcome to KDP's Wonderful World o' Parsing!")
-	fmt.Println()
-	fmt.Println("Enter an expression or 'quit' to exit.")
-	fmt.Println()
+	return parseext.SeqLeftS(
+		parseext.SeqRightS(
+			parse.ParserJust(data.Unit{}),
+			parse.Cache(addP),
+		),
+		parse.Eof(),
+	)
+}()
+
+func main() {
+	for _, s := range []string{
+		"Welcome to KDP's Wonderful World o' Parsing!",
+		"",
+		"Enter an expression or 'quit' to exit.",
+		"",
+	} {
+		fmt.Println(s)
+	}
 
 	reader := bufio.NewReader(os.Stdin)
 
@@ -97,18 +121,7 @@ func main() {
 			return
 		}
 
-		r := parse.Parse(
-			parseext.SeqLeftS(
-				parseext.SeqRightS(
-					parse.ParserJust(data.Unit{}),
-					parse.Cache(addP),
-				),
-				parse.Eof(),
-			),
-			line,
-		)
-
-		if r.SuccessQ() {
+		if r := parse.Parse(parser, line); r.SuccessQ() {
 			v, _ := r.GetSuccess()
 			fmt.Printf("%d\n\n", v)
 		} else {
