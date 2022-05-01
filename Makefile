@@ -16,7 +16,10 @@
 
 GO=go
 
-.PHONY: fmt test
+.PHONY: fmt test demo
+
+demo:
+	rlwrap go run internal/demo/exp.go
 
 fmt:
 	go fmt ./...
