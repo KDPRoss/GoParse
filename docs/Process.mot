@@ -1,0 +1,34 @@
+#MotmotD
+
+#load [
+  $Document.Rendering$,
+  $Document.Structure$,
+  $Processing.DSL$,
+  $Processing.Text$,
+]
+
+input-file : String = $Notes.txt.mot$
+
+common-processing : a => RewritePack a -> RewritePack a =
+  a =>
+    (p : RewritePack a) ~
+      p
+      +libraries [
+        Libraries.Syntax.meta,
+        Libraries.Syntax.punctuation,
+        Libraries.Syntax.standard,
+        Libraries.Feature.code,
+        Libraries.Feature.semantic,
+        Libraries.Feature.url,
+      ]
+      +trees [
+        [[ActionItem]] (t : Tree) ~ Fake!,
+      ]
+
+run-markdown : () -> () = thunk (
+  common-processing markdown-base
+  ->markdown-file-now {
+    input-file,
+    output-file ~ $../README.md$,
+  }
+)
