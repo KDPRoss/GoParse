@@ -9,7 +9,7 @@ not be used for any productive purpose.
 
 Here are some simple parsers demonstrating the capabilities
 of this library; see the `internal/demo` directory for a
-simple intepreter providing a somewhat-more-extensive
+simple interpreter providing a somewhat-more-extensive
 example; the tests are also illustrative.
 
 ### Basic Parsers
@@ -38,7 +38,7 @@ example; the tests are also illustrative.
     }
     ```
 
-* We can also base our parsers or regular expressions ⟦
+* We can also base our parsers on regular expressions ⟦
   These are PCRE regexps—the best sort. ⟧:
 
   ```
@@ -189,7 +189,7 @@ above … from only the basic combinators:
       cons,
     )
     nonemptyList := parse.Proc(parse.Seq(num, parse.Alt(nonemptyTail, emptyList)), cons)
-  
+
     return parse.Alt(nonemptyList, emptyList)
   })
   ```
