@@ -1,4 +1,4 @@
-module github.com/kdpross/go-parse
+module github.com/kdpross/GoParse
 
 go 1.18
 

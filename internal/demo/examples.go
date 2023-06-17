@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/kdpross/go-parse/pkg/data"
-	"github.com/kdpross/go-parse/pkg/parse"
-	"github.com/kdpross/go-parse/pkg/parse_ext"
+	"github.com/kdpross/GoParse/pkg/data"
+	"github.com/kdpross/GoParse/pkg/parse"
+	"github.com/kdpross/GoParse/pkg/parse_ext"
 )
 
 func main() {

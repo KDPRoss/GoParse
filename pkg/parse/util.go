@@ -17,7 +17,7 @@
 package parse
 
 import (
-	"github.com/kdpross/go-parse/pkg/data"
+	"github.com/kdpross/GoParse/pkg/data"
 )
 
 func SeqRight[A, B any](p1 Parser[A], p2 Parser[B]) Parser[B] {

@@ -23,9 +23,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/kdpross/go-parse/pkg/data"
-	"github.com/kdpross/go-parse/pkg/parse"
-	"github.com/kdpross/go-parse/pkg/parse_ext"
+	"github.com/kdpross/GoParse/pkg/data"
+	"github.com/kdpross/GoParse/pkg/parse"
+	"github.com/kdpross/GoParse/pkg/parse_ext"
 )
 
 // A version of the old 'untyped arithmetic expressions'
