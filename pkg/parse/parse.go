@@ -209,7 +209,7 @@ func Txt(v string) Parser[string] {
 // You better believe that we're using PCREs. It's the only
 // redeeming bit of Perl.
 func Regexp(reg string) Parser[string] {
-	r := pcre.MustCompile(reg, 0)
+	r := pcre.MustCompile("^"+reg, 0)
 	return makeParser(func(src source) M[string] {
 		return Bind(
 			getSt(),

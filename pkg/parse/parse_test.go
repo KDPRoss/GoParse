@@ -319,6 +319,18 @@ func TestRegexp(t *testing.T) {
 	})
 }
 
+func TestRegexpRegression(t *testing.T) {
+	p := Regexp("[ab]+")
+
+	r1 := Parse(p, "fooabab")
+	assert.True(t, r1.FailureQ())
+
+	r2 := Parse(p, "aaabbbfooba")
+	require.True(t, r2.SuccessQ())
+	s, _ := r2.GetSuccess()
+	assert.Equal(t, "aaabbb", s)
+}
+
 func TestSeq(t *testing.T) {
 	s := "foozlebopper"
 
