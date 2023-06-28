@@ -398,29 +398,27 @@ func Rep[A any](p Parser[A]) Parser[[]A] {
 
 // This is actually 'end of string'.
 func Eof() Parser[data.Unit] {
-	return makeParser(
-		func(src source) M[data.Unit] {
-			return M[data.Unit]{
-				func(ix int) Result[data.Unit] {
-					if ix == len(src.str) {
-						return success[data.Unit]{data.Unit{}, ix}
-					}
-
-					return failure[data.Unit]{}
-				},
-			}
-		},
-	)
+	return Peek(func(str string, ix int) bool {
+		return ix == len(str)
+	})
 }
 
 // Check end of word / end of string. (Useful, e.g., to
 // force some tokenisation constraints.)
 func Eow() Parser[data.Unit] {
+	return Peek(func(str string, ix int) bool {
+		return ix == len(str) || (ix >= 0 && ix < len(str) && str[ix] == ' ')
+	})
+}
+
+// Generalised 'raw' guard. Note that it never advances the
+// stream pointer; only allows inspection of the state.
+func Peek(g func(string, int) bool) Parser[data.Unit] {
 	return makeParser(
 		func(src source) M[data.Unit] {
 			return M[data.Unit]{
 				func(ix int) Result[data.Unit] {
-					if ix == len(src.str) || (ix >= 0 && ix < len(src.str) && src.str[ix] == ' ') {
+					if g(src.str, ix) {
 						return success[data.Unit]{data.Unit{}, ix}
 					}
 
