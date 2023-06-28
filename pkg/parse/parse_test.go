@@ -576,3 +576,15 @@ func TestSeqRight(t *testing.T) {
 		assert.Equal(t, s2, sP)
 	}
 }
+
+func TestGuard(t *testing.T) {
+	s := "foozleschnozzler"
+
+	p1 := Parse(Guard(Txt(s), func(_ string) bool { return true }), s)
+	require.True(t, p1.SuccessQ())
+	sP, _ := p1.GetSuccess()
+	assert.Equal(t, s, sP)
+
+	p2 := Parse(Guard(Txt(s), func(_ string) bool { return false }), s)
+	assert.False(t, p2.SuccessQ())
+}

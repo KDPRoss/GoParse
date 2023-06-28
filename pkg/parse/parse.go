@@ -267,6 +267,23 @@ func Alt[A any](p1, p2 Parser[A]) Parser[A] {
 	)
 }
 
+func Guard[A any](p Parser[A],f func(A)bool)Parser[A]{
+	return makeParser(
+		func(src source)M[A]{
+			return Bind(
+				p.core(src),
+				func(v A) M[A] {
+					if f(v){
+						return Return(v)
+					}
+
+					return fail[A]()
+				},
+			)
+		},
+	)
+}
+
 func Proc[A, B any](p Parser[A], f func(A) B) Parser[B] {
 	return makeParser(
 		func(src source) M[B] {
