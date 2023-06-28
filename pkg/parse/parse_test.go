@@ -588,3 +588,17 @@ func TestGuard(t *testing.T) {
 	p2 := Parse(Guard(Txt(s), func(_ string) bool { return false }), s)
 	assert.False(t, p2.SuccessQ())
 }
+
+func TestWord(t *testing.T) {
+	s := "foo bar"
+
+	p1 := Parse(SeqLeft(Txt("foo"), Eow()), s)
+	require.True(t, p1.SuccessQ())
+
+	p2 := Parse(SeqLeft(Txt("fo"), Eow()), s)
+	require.False(t, p2.SuccessQ())
+
+	s2 := "foo"
+	p3 := Parse(SeqLeft(Txt("foo"), Eow()), s2)
+	require.True(t, p3.SuccessQ())
+}

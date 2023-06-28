@@ -267,13 +267,13 @@ func Alt[A any](p1, p2 Parser[A]) Parser[A] {
 	)
 }
 
-func Guard[A any](p Parser[A],f func(A)bool)Parser[A]{
+func Guard[A any](p Parser[A], f func(A) bool) Parser[A] {
 	return makeParser(
-		func(src source)M[A]{
+		func(src source) M[A] {
 			return Bind(
 				p.core(src),
 				func(v A) M[A] {
-					if f(v){
+					if f(v) {
 						return Return(v)
 					}
 
@@ -396,12 +396,31 @@ func Rep[A any](p Parser[A]) Parser[[]A] {
 	)
 }
 
+// This is actually 'end of string'.
 func Eof() Parser[data.Unit] {
 	return makeParser(
 		func(src source) M[data.Unit] {
 			return M[data.Unit]{
 				func(ix int) Result[data.Unit] {
 					if ix == len(src.str) {
+						return success[data.Unit]{data.Unit{}, ix}
+					}
+
+					return failure[data.Unit]{}
+				},
+			}
+		},
+	)
+}
+
+// Check end of word / end of string. (Useful, e.g., to
+// force some tokenisation constraints.)
+func Eow() Parser[data.Unit] {
+	return makeParser(
+		func(src source) M[data.Unit] {
+			return M[data.Unit]{
+				func(ix int) Result[data.Unit] {
+					if ix == len(src.str) || (ix >= 0 && ix < len(src.str) && src.str[ix] == ' ') {
 						return success[data.Unit]{data.Unit{}, ix}
 					}
 
