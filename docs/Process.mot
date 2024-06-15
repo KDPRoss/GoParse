@@ -1,4 +1,4 @@
-#MotmotD
+#MotmotFScript
 
 #load [
   $Document.Rendering$,
@@ -13,7 +13,7 @@ input-file : String = $Notes.txt.mot$
 
 common-processing : a => RewritePack a -> RewritePack a =
   a =>
-    (p : RewritePack a) ~
+    p : RewritePack a ~
       p
       +libraries [
         Libraries.Syntax.meta,
