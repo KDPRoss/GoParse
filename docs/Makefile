@@ -9,4 +9,4 @@ run: markdown
 markdown: $(MARKDOWN)
 
 $(MARKDOWN): $(INPUT) $(PROCESSING)
-	$(MOTMOT) -file $(PROCESSING) -exp 'run-markdown ()' -prefix Markdown
+	$(MOTMOT) -file $(PROCESSING) -exp 'Notes.Processing.run ()' -prefix Markdown

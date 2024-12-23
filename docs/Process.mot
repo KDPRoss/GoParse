@@ -1,5 +1,9 @@
 #MotmotF
 
+-- Generate the `README.md` from TML.
+
+{-- Notes.Processing --}
+
 #load [
   $Document.Rendering$,
   $Document.Structure$,
@@ -9,28 +13,26 @@
 
 #using $Processing.DSL$
 
-input-file : String = $Notes.txt.mot$
-
-common-processing : a => RewritePack a -> RewritePack a =
-  a =>
-    p : RewritePack a ~
-      p
-      +libraries [
-        Libraries.Syntax.meta,
-        Libraries.Syntax.punctuation,
-        Libraries.Syntax.standard,
-        Libraries.Feature.code,
-        Libraries.Feature.semantic,
-        Libraries.Feature.url,
-      ]
-      +trees [
-        [[ActionItem]] (t : Tree) ~ Fake!,
-      ]
-
-run-markdown : () -> () = thunk (
-  common-processing markdown-base
-  ->markdown-file-now {
-    input-file,
-    output-file ~ $../README.md$,
-  }
+run : () -> () = thunk (
+  input-file |>
+    read-file-stream >>
+    core >>
+    ({ $# GoParse$, $$ } ++_ _) >>
+    map-stream ($^[ ]+#{dollar}$ =>r $$) >>
+    write-file-stream output-file
+  where core =
+          markdown-base
+          +libraries [
+            Libraries.Syntax.meta,
+            Libraries.Syntax.punctuation,
+            Libraries.Syntax.standard,
+            Libraries.Feature.code,
+            Libraries.Feature.semantic,
+            Libraries.Feature.url,
+          ] +cache-file $#{lib-dir}/Processing.Line.mot.cache$
+          ->markdown-stream ()
+      | input-file  = $#{lib-dir}/Notes.txt.mot$
+      | output-file = $#{lib-dir}/../README.md$
 )
+
+{-end- Notes.Processing --}
