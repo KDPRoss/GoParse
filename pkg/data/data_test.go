@@ -11,7 +11,7 @@
 // │ - gratis redistribution of the code in entirety and in      │
 // │   unaltered form for any aforementioned purpose             │
 // │                                                             │
-// │ Copyright 2022, K.D.P.Ross                                  │
+// │ Copyright 2022-2025, K.D.P.Ross                             │
 // └─────────────────────────────────────────────────────────────┘
 
 package data

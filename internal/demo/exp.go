@@ -11,7 +11,7 @@
 // │ - gratis redistribution of the code in entirety and in      │
 // │   unaltered form for any aforementioned purpose             │
 // │                                                             │
-// │ Copyright 2022, K.D.P.Ross                                  │
+// │ Copyright 2022-2025, K.D.P.Ross                             │
 // └─────────────────────────────────────────────────────────────┘
 
 package main
@@ -25,7 +25,7 @@ import (
 
 	"github.com/kdpross/GoParse/pkg/data"
 	"github.com/kdpross/GoParse/pkg/parse"
-	"github.com/kdpross/GoParse/pkg/parse_ext"
+	parseext "github.com/kdpross/GoParse/pkg/parse_ext"
 )
 
 // A version of the old 'untyped arithmetic expressions'
