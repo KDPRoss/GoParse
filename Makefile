@@ -29,3 +29,13 @@ fmt:
 
 test:
 	go test ./...
+
+.PHONY: markdownlint markdownlint-fix
+markdown-lint: node_modules
+	yarn markdownlint --config .markdownlint.jsonc --ignore **/node_modules/** **/*.md *.md
+
+markdown-lint-fix: node_modules
+	yarn markdownlint --config .markdownlint.jsonc --ignore **/node_modules/** **/*.md *.md -fix
+
+node_modules:
+	pnpm install

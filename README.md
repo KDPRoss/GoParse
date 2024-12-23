@@ -1,3 +1,5 @@
+# GoParse
+
 ## About
 
 GoParse is an implementation of parser combinators in
@@ -17,13 +19,13 @@ example; the tests are also illustrative.
 * The simplest possible parser is one that matches a
   constant string:
 
-  ```
+  ```go
   fooParse := parse.Txt("foo")
   ```
 
   * Let's parse something (successfully) with it:
 
-    ```
+    ```go
     if r := parse.Parse(fooParse, "foo"); r.SuccessQ() {
       v, _ := r.GetSuccess()
       fmt.Printf("v = %q\n", v) // prints `v = "foo"`
@@ -32,7 +34,7 @@ example; the tests are also illustrative.
 
   * Let's see our first parse failure:
 
-    ```
+    ```go
     if r := parse.Parse(fooParse, "bar"); r.FailureQ() {
       fmt.Println("Ruh roh! Parse failure.")
     }
@@ -41,13 +43,13 @@ example; the tests are also illustrative.
 * We can also base our parsers on regular expressions ⟦
   These are PCRE regexps—the best sort. ⟧:
 
-  ```
+  ```go
   baaarParse := parse.Regexp("ba+r")
   ```
 
   * We might use this like:
 
-    ```
+    ```go
     if r := parse.Parse(baaarParse, "baaaaaaaaaar"); r.SuccessQ() {
       v, _ := r.GetSuccess()
       fmt.Printf("v = %q\n", v) // prints `v = "baaaaaaaaaar"`
@@ -61,7 +63,7 @@ else) is beautiful and powerful because of compositionality.
 
 * We can sequence parsers:
 
-  ```
+  ```go
   fooBarParse := parse.Seq(fooParse, baaarParse)
   ```
 
@@ -69,7 +71,7 @@ else) is beautiful and powerful because of compositionality.
     (upon a successful parse) return a pair of values ‘in
     the obvious way’:
 
-    ```
+    ```go
     fooBarParse := parse.Seq(fooParse, baaarParse)
     if r := parse.Parse(fooBarParse, "foobaaaaaaaaar"); r.SuccessQ() {
       v, _ := r.GetSuccess()
@@ -79,7 +81,7 @@ else) is beautiful and powerful because of compositionality.
 
 * We can post-process the result of a parser:
 
-  ```
+  ```go
   num := parse.Proc(
     parse.Regexp("[0-9]+"),
     func(s string) int {
@@ -98,11 +100,11 @@ else) is beautiful and powerful because of compositionality.
 
 * We can repeat some parser separated by a delimiter:
 
-  ```
+  ```go
   numList := parseext.RepSep(num, parse.Txt(","))
   ```
 
-  ```
+  ```go
   if r:=parse.Parse(numList, "1,2,12,57"); r.SuccessQ() {
     v, _ := r.GetSuccess()
     fmt.Printf("v = %v\n", v) // prints `v = [1 2 12 57]`
@@ -112,7 +114,7 @@ else) is beautiful and powerful because of compositionality.
   * We may also wish to allow spaces—and require matching
     a nonempty sequence, which we can do like this:
 
-    ```
+    ```go
     numListSpaces := parseext.RepSep1(
       num,
       parse.Seq(
@@ -137,7 +139,7 @@ above … from only the basic combinators:
 * First, let's write a ‘forward declaration’ of our
   parser:
 
-  ```
+  ```go
   var numList data.Lazy[parse.Parser[[]int]]
   ```
 
@@ -149,7 +151,7 @@ above … from only the basic combinators:
   functional-style `cons`’ function and a trivial
   empty-list parser:
 
-  ```
+  ```go
   cons := func(p data.Pair[int, []int]) []int {
     return append([]int{p.First()}, p.Second()...)
   }
@@ -158,7 +160,7 @@ above … from only the basic combinators:
 
 * Using these, we can define a parser for a nonempty list:
 
-  ```
+  ```go
   nonemptyList := parse.Proc(parse.Seq(num, parse.Alt(nonemptyTail, emptyList)), cons)
   ```
 
@@ -168,13 +170,13 @@ above … from only the basic combinators:
 
 * And, a list is either a nonempty list xor an empty list:
 
-  ```
+  ```go
   parse.Alt(nonemptyList, emptyList)
   ```
 
 * Putting this all together, we have:
 
-  ```
+  ```go
   var numListCustom data.Lazy[parse.Parser[[]int]]
   numListCustom = data.MkLazy(func() parse.Parser[[]int] {
     cons := func(p data.Pair[int, []int]) []int {
@@ -196,7 +198,7 @@ above … from only the basic combinators:
 
 * And, we can use this like:
 
-  ```
+  ```go
   if r := parse.Parse(parse.Cache(numListCustom), "1,23,456"); r.SuccessQ() {
     v, _ := r.GetSuccess()
     fmt.Printf("v = %v\n", v) // prints `v = [1 23 456]`
@@ -213,8 +215,7 @@ mutual-self-reference / -recursion) in our parsers.
 I wrote this library primarily to get a sense of what it
 ‘feels like’ to write fundamentally-polymorphic code in
 Golang. I wrote this code across a few sessions over a
-weekend (whilst drinking, alternatingly, coffee and
-Champagne), and I noticed a few things:
+weekend, and I noticed a few things:
 
 * In VSCode, at least, it helped the type system immensely
   to provide seemingly-needless type annotations. Once the
