@@ -29,6 +29,7 @@ fmt:
 
 test:
 	go test ./pkg/...
+	go test ./internal/motmot/...
 
 .PHONY: markdown-lint
 markdown-lint: node_modules
